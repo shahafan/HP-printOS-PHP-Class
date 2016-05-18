@@ -1,9 +1,8 @@
 # HP-printOS-PHP-Class
 
-simple box usage:
+simple usage:
 
 require_once('printos.php');
-
 $clientInfo = array(
 	'token' => '', // token
 	'secret' => '', // secret
