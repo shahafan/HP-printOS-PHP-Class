@@ -66,10 +66,8 @@ class PrintOs
   	$this->httpHeaderString = $this->token . ':' . $hmacHash;
   }
 
-  public function request($data)
+  public function request($data=false)
   {
-    $postData = json_encode($data);
-
     $headers = array(
     	"Content-type: application/json",
     	"x-hp-hmac-authentication: ".$this->httpHeaderString,
@@ -79,13 +77,16 @@ class PrintOs
 
     // Setup cURL
     $ch = curl_init($this->baseUrl.$this->path);
-
-    curl_setopt_array($ch, array(
-    	CURLOPT_POST => true,
+    $setopt = array(
     	CURLOPT_RETURNTRANSFER => true,
-    	CURLOPT_HTTPHEADER => $headers,
-    	CURLOPT_POSTFIELDS => $postData
-    ));
+    	CURLOPT_HTTPHEADER => $headers
+    );
+    if($data){
+      $setopt[CURLOPT_POST] = true;
+      $setopt[CURLOPT_POSTFIELDS] = json_encode($data);
+    }
+    curl_setopt_array($ch, $setopt);
+
 
     // Send the request
     $response = curl_exec($ch);
